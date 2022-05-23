@@ -1,0 +1,79 @@
+-- SCHEMA: challenge_Cambalache
+create table language_p(
+	id serial not NULL,
+	name varchar(50) not null,
+	condition boolean not null default true,
+    CONSTRAINT pk_language_p PRIMARY KEY (id)
+);
+CREATE TABLE clientUser(
+	id serial primary key,
+	name varchar(50) not null,
+	birthdate date not null,
+	email varchar(50) not null,
+	password varchar(200) not null,
+	condition boolean not null default true
+);
+create table languageFav(
+	id serial primary key,
+	idlanguage_p integer not null,
+	iduser integer not null,
+	condition boolean not null default true,
+	CONSTRAINT fk_language
+      FOREIGN KEY(idlanguage_p) 
+	  REFERENCES language_p(id)
+);
+create table rol(
+	id serial primary key,
+	name varchar(50) not null,
+	condition boolean not null default true
+);
+create table userRol(
+	id serial primary key,
+	idRol integer not null,
+	idUser integer not null,
+	condition boolean not null default true,
+   CONSTRAINT fk_user
+      FOREIGN KEY(idUser) 
+	  REFERENCES clientUser(id),
+  CONSTRAINT fk_rol
+      FOREIGN KEY(idRol) 
+	  REFERENCES rol(id)
+);
+create table userEvent(
+	id serial primary key,
+	iduser integer not null,
+	event_date date not null,
+	event_type varchar(30) not null,
+	condition boolean not null default true,
+	CONSTRAINT fk_user
+      FOREIGN KEY(idUser) 
+	  REFERENCES clientUser(id)
+);
+create table Repository(
+	id serial primary key,
+	iduser integer not null,
+	projectName varchar(100) not null,
+	creationDate date not null,
+	description varchar(100) null,
+	condition boolean not null default true
+	CONSTRAINT fk_user
+      FOREIGN KEY(idUser) 
+	  REFERENCES clientUser(id)
+);
+create table languageRepo(
+	id serial primary key,
+	idRepository integer not null,
+	idlanguage_p integer not null,
+	condition boolean not null default true,
+	CONSTRAINT fk_repo
+      FOREIGN KEY(idRepository) 
+	  REFERENCES Repository(id),
+	CONSTRAINT fk_language
+      FOREIGN KEY(idlanguage_p) 
+	  REFERENCES language_p(id)
+); 
+
+-- DROP SCHEMA IF EXISTS "challenge_Cambalache" ;
+
+CREATE SCHEMA IF NOT EXISTS "challenge_Cambalache"
+    AUTHORIZATION postgres;
